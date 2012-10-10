@@ -1,0 +1,21 @@
+;;;; readtable.lisp
+(cl:in-package :cmlisp1-internal)
+(in-readtable :common-lisp)
+
+(defreadtable :cmlisp
+  (:merge :standard)
+  (:macro-char #\[ #'cmlisp1-internal::open-bracket-macro-char)
+  (:syntax-from :standard #\) #\])
+  (:macro-char #\{ #'cmlisp1-internal::open-brace-macro-char)
+  (:syntax-from :standard #\) #\})
+  (:macro-char #\→ (lambda (s c)
+                      (declare (ignore s c))
+                      (values))
+               nil)
+  (:macro-char #\α (lambda (s c)
+                      (declare (ignore c))
+                      (list 'alpha (read s t nil t))))
+  (:macro-char #\• (lambda (s c)
+                     (declare (ignore c))
+                     (list 'bullet (read s t nil t))))
+  (:case :upcase))
