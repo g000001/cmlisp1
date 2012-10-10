@@ -1,6 +1,5 @@
 (cl:in-package :cmlisp1-internal)
 
-(in-suite cmlisp1)
 
 (defconstant bullet-char (name-char "BULLET"))
 (defconstant alpha-char (name-char "GREEK_SMALL_LETTER_ALPHA"))
@@ -16,10 +15,7 @@
   (defun open-bracket-macro-char (stream macro-char)
     (declare (ignore macro-char))
     (let ((range (read-delimited-list #\] stream t)))
-      (xap (iota-list (length range)) range)))
-
-  (set-macro-character #\[ #'open-bracket-macro-char)
-  (set-macro-character #\] (get-macro-character #\) )))
+      (xap (iota-list (length range)) range))))
 
 (defun %reader-error (s mesg)
   (error mesg :stream s))
@@ -65,28 +61,6 @@
                       (push item range)
                       (return (xap (reverse domain) (reverse range))))
                      (t (push item domain)
-                        (push item range))))))))
+                        (push item range)))))))) )
 
-  (eval-when (:compile-toplevel :load-toplevel :execute)
-    (set-macro-character #\{ #'open-brace-macro-char)
-    (set-macro-character #\} (get-macro-character #\)))
-    (set-macro-character rightwards-arrow-char
-                         (lambda (s c)
-                           (declare (ignore s))
-                           (values))
-                         NIL)) )
 
-(test read-xector
-  (let ((xector (read-from-string "[A B C]")))
-    ;; FIXME xector= が必要
-    (is (string= (write-to-string xector)
-                 "[A B C]"))
-    (is (equal (xapping-domain xector)
-               '(0 1 2)))))
-
-(test read-xet
-  (let ((xet (read-from-string "{A B C}"))
-        (xet2 (read-from-string "{a→a b→b c→c}")))
-    ;; FIXME xet= が必要
-    (is (string= (write-to-string xet) "{A B C}"))
-    (is (string= (write-to-string xet2) "{A B C}"))))

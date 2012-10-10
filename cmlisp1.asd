@@ -4,11 +4,14 @@
 
 (defsystem :cmlisp1
   :serial t
+  :depends-on (:named-readtables :fiveam)
   :components ((:file "package")
                (:file "xapping")
                (:file "reader")
                (:file "printer")
-               (:file "cmlisp1")))
+               (:file "readtable")
+               #|(:file "cmlisp1")|#
+               #|(:file "test")|#))
 
 (defmethod perform ((o test-op) (c (eql (find-system :cmlisp1))))
   (load-system :cmlisp1)

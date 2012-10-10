@@ -4,10 +4,15 @@
 
 (defpackage :cmlisp1
   (:use)
-  (:export))
+  (:export :eval :apply))
 
 (defpackage :cmlisp1-internal
-  (:use :cmlisp1 :cl :fiveam))
+  (:use :cmlisp1 :cl :fiveam :named-readtables)
+  (:shadowing-import-from :cmlisp1 
+                          :eval
+                          :apply))
+
+
 
 (in-package :cmlisp1-internal)
 (def-suite cmlisp1)
